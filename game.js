@@ -34,6 +34,8 @@ appleImage.src = './resources/apple.png';
 
 let gameCycle;
 
+let score = 0;
+
 
 
 //showing the current element to the user (the canva)
@@ -92,7 +94,7 @@ document.addEventListener('keydown', (e) => {
 //staring the game
 //TODO: adding the pause button in its place
 export function playGame() {
-    gameCycle = setInterval(drawScene, 200);
+    gameCycle = setInterval(drawScene, 300);
     let beginButton = document.getElementById('begin');
     beginButton.remove();
 }
@@ -106,7 +108,6 @@ function drawScene() {
     doNextMove(direction, snakeCoordinations);
     drawSnake();
 }
-//TODO view where the check method have to be hronologically
 
 function changeDirection() {
     let nextDirection = directionsQueue.shift();
@@ -156,10 +157,24 @@ function doNextMove(direction, snakeCoordinations) {
     if (matrix[headCoordinations[0]][headCoordinations[1]] != 'A') {
         snakeCoordinations.shift();
     }
-    else if (matrix[headCoordinations[0]][headCoordinations[1]] = 'A') {
+    else if (matrix[headCoordinations[0]][headCoordinations[1]] == 'A') {
         currentAppleCoordinations = [];
-    }
+        score += 20;
 
+        //logic for making the game harder
+        if (score == 200) {
+            clearInterval(gameCycle);
+            gameCycle = setInterval(drawScene, 200);
+        }
+        else if (score == 400) {
+            clearInterval(gameCycle);
+            gameCycle = setInterval(drawScene, 100);
+        }
+        else if (score == 600) {
+            clearInterval(gameCycle);
+            gameCycle = setInterval(drawScene, 70);
+        }
+    }
 
     let isCrossing = snakeCoordinations.find(x => x[0] == headCoordinations[0] && x[1] == headCoordinations[1]);
     if (isCrossing != undefined) {
@@ -190,10 +205,6 @@ function checkApples() {
             }
 
         }
-    }
-
-    if (freePlaces.length == 0) {
-        //TODO winning the game
     }
 
     let newAppleCoordinations = freePlaces[Math.floor(Math.random() * (freePlaces.length - 0 + 1)) + 0];
@@ -253,7 +264,7 @@ function drawGrid() {
 }
 
 
-//clering methods for the canva and the matrix
+//clearing methods for the canva and the matrix
 
 function clearCanva() {
 
@@ -277,10 +288,7 @@ function clearMatrix() {
 
 
 
-//logic for adding the apple in the matrix and not deleting it in the method of clearing the matrix
 //scoring counter for the amount of apples eaten
-//making the snake longer when she eats an apple
-//logic for the case when the snake bites itself
 //
 //TODO: changing the speed of the snake after becoming longer
 //pause option during playing
