@@ -1,5 +1,5 @@
 import { showScoresPage, showHelpPage, showHomePage } from "./views.js";
-import { showGame, playGame } from "./game.js";
+import { showGame } from "./game.js";
 import { default as page } from './node_modules/page/page.mjs';
 import { render } from 'https://unpkg.com/lit-html?module';
 

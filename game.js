@@ -12,7 +12,7 @@ let canvas;
 let canvasContext;
 
 //the whole body of the snake by coordinations
-let snakeCoordinations = [[11, 2], [11, 3], [11, 4]];
+let snakeCoordinations = [[9, 2], [9, 3], [9, 4]];
 
 //queue for adding the requested directions by the player 
 let directionsQueue = [];
@@ -34,16 +34,19 @@ appleImage.src = './resources/apple.png';
 
 let gameCycle;
 
+let scoreBlock;
 let score = 0;
 
 
 
 //showing the current element to the user (the canva)
-let canvasTemplate = (playGame) => html`  <canvas id="canvas" width="800" height="700" style="position:absolute; top:3%; left:22%;" ></canvas> <button @click=${playGame} id="begin" width = "200" height="40" style="position:absolute; top:46%; left:36%">Click To Start</button>`;
+let canvasTemplate = (playGame) => html`  <canvas id="canvas" width="800" height="700" style="position:absolute; top:3%; left:22%;" ></canvas> <button @click=${playGame} id="begin" width = "200" height="40" style="position:absolute; top:46%; left:36%">Click To Start</button> <div id="scoreBlock">Score: 0</div>`;
 
 export async function showGame(ctx) {
 
     ctx.render(canvasTemplate(playGame));
+
+    scoreBlock = document.getElementById('scoreBlock');
 
     canvas = document.getElementById("canvas");
     /** @type {CanvasRenderingContext2D} */
@@ -160,8 +163,9 @@ function doNextMove(direction, snakeCoordinations) {
     else if (matrix[headCoordinations[0]][headCoordinations[1]] == 'A') {
         currentAppleCoordinations = [];
         score += 20;
+        scoreBlock.textContent = `Score: ${score}`;
 
-        //logic for making the game harder
+        //logic for making the game harder after a certain apples count been eaten
         if (score == 200) {
             clearInterval(gameCycle);
             gameCycle = setInterval(drawScene, 200);
@@ -174,16 +178,44 @@ function doNextMove(direction, snakeCoordinations) {
             clearInterval(gameCycle);
             gameCycle = setInterval(drawScene, 70);
         }
+
     }
 
     let isCrossing = snakeCoordinations.find(x => x[0] == headCoordinations[0] && x[1] == headCoordinations[1]);
     if (isCrossing != undefined) {
         clearInterval(gameCycle);
+
+
+        let restartGameButton = document.createElement('button');
+        restartGameButton.setAttribute('id', 'restartGameButton');
+        restartGameButton.setAttribute('style', 'position: absolute; left:35%; top:45%;');
+        restartGameButton.textContent = `Restart Game`;
+        restartGameButton.addEventListener('click', (e) => {
+
+            clearGameVariables();
+            document.getElementById('scoreBlock').textContent = "Score: 0";
+
+            gameCycle = setInterval(drawScene, 300);
+
+            e.target.remove();
+        });
+        let mainElement = document.getElementById('main');
+        mainElement.appendChild(restartGameButton);
+        //logic for ending the game
+        //rendering the score at the end of the game
     }
 
     snakeCoordinations.push([headCoordinations[0], headCoordinations[1]]);
 }
 
+function clearGameVariables() {
+
+    snakeCoordinations = [[9, 2], [9, 3], [9, 4]];
+    directionsQueue = [];
+    direction = 'right';
+    currentAppleCoordinations = [];
+    score = 0;
+}
 
 //methods for the logic of the apple
 

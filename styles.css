@@ -88,3 +88,22 @@ button {
     top: 220px;
     left: 180px;
 }
+
+#scoreBlock {
+    position: absolute;
+    top: 15%;
+    left: 80%;
+    width: 400;
+    height: 200;
+    background-color: rgb(36, 210, 65);
+    text-align: center;
+    font-size: 40px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 3px solid black;
+    color: black;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: fantasy;
+}
