@@ -33,6 +33,7 @@ let appleImage = new Image();
 appleImage.src = './resources/apple.png';
 
 let gameCycle;
+let level = 1;
 
 let scoreBlock;
 let score = 0;
@@ -40,13 +41,10 @@ let score = 0;
 
 
 //showing the current element to the user (the canva)
-let canvasTemplate = (playGame) => html`  <canvas id="canvas" width="800" height="700" style="position:absolute; top:3%; left:22%;" ></canvas> <button @click=${playGame} id="begin" width = "200" height="40" style="position:absolute; top:46%; left:36%">Click To Start</button> <div id="scoreBlock">Score: 0</div>`;
+let canvasTemplate = (playGame) => html`  <canvas id="canvas" width="800" height="700"></canvas> <button @click=${playGame} id="begin" width = "200" height="40" style="position:absolute; top:46%; left:36%">Click To Start</button>`;
 
 export async function showGame(ctx) {
-
     ctx.render(canvasTemplate(playGame));
-
-    scoreBlock = document.getElementById('scoreBlock');
 
     canvas = document.getElementById("canvas");
     /** @type {CanvasRenderingContext2D} */
@@ -95,8 +93,30 @@ document.addEventListener('keydown', (e) => {
 
 
 //staring the game
-//TODO: adding the pause button in its place
-export function playGame() {
+function playGame() {
+
+    let mainElement = document.getElementById('main');
+    //showing the pause button and the score div
+
+    let scoreDiv = document.createElement('div');
+    scoreDiv.setAttribute('id', 'scoreBlock');
+    scoreDiv.textContent = 'Score: 0';
+    scoreBlock = scoreDiv;
+
+    let pauseButton = document.createElement('button');
+    pauseButton.setAttribute('id', 'pauseButton');
+    pauseButton.setAttribute('style', 'position:absolute; left:5%; top:10%; width: 200px;');
+    pauseButton.textContent = 'pause';
+    pauseButton.addEventListener('click', (e) => {
+        clearInterval(gameCycle);
+        //visualing the pause menu while game is stopped
+        showPauseMenu(mainElement);
+    });
+
+
+    mainElement.appendChild(scoreDiv);
+    mainElement.appendChild(pauseButton);
+
     gameCycle = setInterval(drawScene, 300);
     let beginButton = document.getElementById('begin');
     beginButton.remove();
@@ -169,14 +189,17 @@ function doNextMove(direction, snakeCoordinations) {
         if (score == 200) {
             clearInterval(gameCycle);
             gameCycle = setInterval(drawScene, 200);
+            level = 2;
         }
         else if (score == 400) {
             clearInterval(gameCycle);
             gameCycle = setInterval(drawScene, 100);
+            level = 3;
         }
         else if (score == 600) {
             clearInterval(gameCycle);
             gameCycle = setInterval(drawScene, 70);
+            level = 4;
         }
 
     }
@@ -318,9 +341,50 @@ function clearMatrix() {
     }
 }
 
+function showPauseMenu(mainElement) {
 
+    let pauseMenuDiv = document.createElement('div');
 
-//scoring counter for the amount of apples eaten
-//
-//TODO: changing the speed of the snake after becoming longer
+    pauseMenuDiv.setAttribute('id', 'pauseMenu');
+    pauseMenuDiv.textContent = 'Pause Menu';
+
+    let resumeButton = document.createElement('button');
+    resumeButton.textContent = 'Resume Game';
+    resumeButton.setAttribute('style', 'position: absolute; left:16%; top: 30%; width:370px;');
+    resumeButton.addEventListener('click', (e) => {
+
+        e.target.parentElement.remove();
+
+        if (level == 1) {
+            gameCycle = setInterval(drawScene, 300);
+        }
+        else if (level == 2) {
+            gameCycle = setInterval(drawScene, 200);
+        }
+        else if (level == 3) {
+            gameCycle = setInterval(drawScene, 100);
+        }
+        else if (level == 4) {
+            gameCycle = setInterval(drawScene, 70);
+        }
+    });
+
+    let quitButton = document.createElement('a');
+    quitButton.textContent = 'Quit Game';
+    quitButton.setAttribute('style', 'position: absolute; left:16%; top: 60%; width:370px;');
+    quitButton.setAttribute('href', '/');
+
+    pauseMenuDiv.appendChild(resumeButton);
+    pauseMenuDiv.appendChild(quitButton);
+
+    mainElement.appendChild(pauseMenuDiv);
+}
+
 //pause option during playing
+//visualizing the pause button on the screen with the clicking of game start button
+//event listener pausing the game state by clearing the set interval function
+//check if while paused the event listener for commands work
+//showing the pause menu and button to go back to playing the game
+
+
+//TODO: resolving the bug when return going to the home page back and forth invoke the game cycle method multiple times
