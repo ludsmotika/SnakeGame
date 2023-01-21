@@ -58,11 +58,15 @@ export async function showGame(ctx) {
 
     canvasContext.stroke();
 
+    clearGameVariables();
+
     drawGrid();
 }
 
-
-
+window.addEventListener('popstate', (e) => {
+    clearGameVariables();
+    clearInterval(gameCycle);
+})
 
 document.addEventListener('keydown', (e) => {
 
@@ -108,6 +112,8 @@ function playGame() {
     pauseButton.setAttribute('style', 'position:absolute; left:5%; top:10%; width: 200px;');
     pauseButton.textContent = 'pause';
     pauseButton.addEventListener('click', (e) => {
+
+        e.target.disabled = true;
         clearInterval(gameCycle);
         //visualing the pause menu while game is stopped
         showPauseMenu(mainElement);
@@ -117,6 +123,7 @@ function playGame() {
     mainElement.appendChild(scoreDiv);
     mainElement.appendChild(pauseButton);
 
+    directionsQueue = [];
     gameCycle = setInterval(drawScene, 300);
     let beginButton = document.getElementById('begin');
     beginButton.remove();
@@ -238,6 +245,7 @@ function clearGameVariables() {
     direction = 'right';
     currentAppleCoordinations = [];
     score = 0;
+    level = 1;
 }
 
 //methods for the logic of the apple
@@ -350,10 +358,13 @@ function showPauseMenu(mainElement) {
 
     let resumeButton = document.createElement('button');
     resumeButton.textContent = 'Resume Game';
-    resumeButton.setAttribute('style', 'position: absolute; left:16%; top: 30%; width:370px;');
+    resumeButton.setAttribute('style', 'position: absolute; left:16%; top: 30%;');
     resumeButton.addEventListener('click', (e) => {
 
         e.target.parentElement.remove();
+        document.getElementById('pauseButton').disabled = false;
+
+        directionsQueue = [];
 
         if (level == 1) {
             gameCycle = setInterval(drawScene, 300);
@@ -370,9 +381,15 @@ function showPauseMenu(mainElement) {
     });
 
     let quitButton = document.createElement('a');
+
     quitButton.textContent = 'Quit Game';
-    quitButton.setAttribute('style', 'position: absolute; left:16%; top: 60%; width:370px;');
+    quitButton.setAttribute('style', 'position: absolute; left:16%; top: 60%;');
     quitButton.setAttribute('href', '/');
+
+    quitButton.addEventListener('click', () => {
+        clearGameVariables();
+    });
+
 
     pauseMenuDiv.appendChild(resumeButton);
     pauseMenuDiv.appendChild(quitButton);
@@ -380,11 +397,4 @@ function showPauseMenu(mainElement) {
     mainElement.appendChild(pauseMenuDiv);
 }
 
-//pause option during playing
-//visualizing the pause button on the screen with the clicking of game start button
-//event listener pausing the game state by clearing the set interval function
-//check if while paused the event listener for commands work
-//showing the pause menu and button to go back to playing the game
-
-
-//TODO: resolving the bug when return going to the home page back and forth invoke the game cycle method multiple times
+//after dieing clear the game level
