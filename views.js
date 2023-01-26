@@ -7,7 +7,7 @@ let homePageTemplate = () => html`<div id="startingPage">
     <p class="mainText">Snake Game</p>
     
     <a style="position:absolute; top: 260px; left: 270px;" id="start" href="/game">Start Game</a>
-    <a style="position:absolute; top: 390px; left: 270px;" id="scores">Best Scores</a>
+    <a style="position:absolute; top: 390px; left: 270px;" id="scores" href="/scores">Best Scores</a>
     <a style="position:absolute; top: 520px; left: 270px;" id="help" href="/help">Help</a>
     
     <img src="./resources/snakeStartingPage.png" alt="snake image" width="600"
@@ -22,7 +22,7 @@ export async function showHomePage(ctx) {
 
 
 let helpPageTemplate = () => html`<div id="helpPage">
-<a id='backButton' href="/" style="position:absolute; top: 80px; left: 100px;">Return to home</a>
+<a id='backButtonHelp' href="/" style="position:absolute; top: 80px; left: 100px;">Return to home</a>
 <p class="mainText">Instructions</p>
 <h2 class="secondaryText">Gameplay: The player controls a long, thin snake-like creature that crawls along a
     plane, collecting food, avoiding collisions with its own
@@ -42,8 +42,10 @@ export async function showHelpPage(ctx) {
 
 //TODO: finish the scores page logic
 
-let scoresPageTemplate = () => html``;
+let scoresPageTemplate = (scores) => html`<a id='backButtonScores' href="/" style="position:absolute; top: 80px; left: 100px;">Return to home</a><div id = "bestScoresPage"></div>`;
 
-export async function showScoresPage() {
-
+export async function showScoresPage(ctx) {
+    //getting the data from the database for the best scores and visualizing the best 10 scores
+    let scores;
+    await ctx.render(scoresPageTemplate(scores));
 }

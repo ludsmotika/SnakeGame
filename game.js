@@ -1,4 +1,5 @@
 import { html } from 'https://unpkg.com/lit-html?module';
+import { getDanielScore } from './firebase.js';
 
 const width = 800;
 const height = 700;
@@ -115,6 +116,7 @@ function playGame() {
 
         e.target.disabled = true;
         clearInterval(gameCycle);
+
         //visualing the pause menu while game is stopped
         showPauseMenu(mainElement);
     });
@@ -151,9 +153,10 @@ function changeDirection() {
     }
 }
 
-function doNextMove(direction, snakeCoordinations) {
 
-    let headCoordinations = snakeCoordinations[snakeCoordinations.length - 1].slice(0);
+
+
+function changeHeadCordinations(headCoordinations, direction) {
 
 
     switch (direction) {
@@ -182,6 +185,16 @@ function doNextMove(direction, snakeCoordinations) {
             }
             break;
     }
+}
+
+
+
+
+function doNextMove(direction, snakeCoordinations) {
+
+    let headCoordinations = snakeCoordinations[snakeCoordinations.length - 1].slice(0);
+
+    changeHeadCordinations(headCoordinations, direction);
 
     //check if you have eaten an apple
     if (matrix[headCoordinations[0]][headCoordinations[1]] != 'A') {
@@ -212,43 +225,17 @@ function doNextMove(direction, snakeCoordinations) {
     }
 
     let isCrossing = snakeCoordinations.find(x => x[0] == headCoordinations[0] && x[1] == headCoordinations[1]);
+
     if (isCrossing != undefined) {
         clearInterval(gameCycle);
-
-
-        let restartGameButton = document.createElement('button');
-        restartGameButton.setAttribute('id', 'restartGameButton');
-        restartGameButton.setAttribute('style', 'position: absolute; left:35%; top:45%;');
-        restartGameButton.textContent = `Restart Game`;
-        restartGameButton.addEventListener('click', (e) => {
-
-            clearGameVariables();
-            document.getElementById('scoreBlock').textContent = "Score: 0";
-
-            gameCycle = setInterval(drawScene, 300);
-
-            e.target.remove();
-        });
-        let mainElement = document.getElementById('main');
-        mainElement.appendChild(restartGameButton);
-        //logic for ending the game
-        //rendering the score at the end of the game
+        showGameOverMenu();
     }
 
     snakeCoordinations.push([headCoordinations[0], headCoordinations[1]]);
 }
 
-function clearGameVariables() {
 
-    snakeCoordinations = [[9, 2], [9, 3], [9, 4]];
-    directionsQueue = [];
-    direction = 'right';
-    currentAppleCoordinations = [];
-    score = 0;
-    level = 1;
-}
 
-//methods for the logic of the apple
 
 function checkApples() {
 
@@ -273,7 +260,6 @@ function checkApples() {
     let newAppleCoordinations = freePlaces[Math.floor(Math.random() * (freePlaces.length - 0 + 1)) + 0];
     currentAppleCoordinations = [newAppleCoordinations[0], newAppleCoordinations[1]];
 }
-
 
 
 
@@ -304,6 +290,10 @@ function drawSnake() {
     }
 }
 
+
+
+
+
 function drawGrid() {
 
     canvasContext.strokeStyle = 'grey';
@@ -327,6 +317,8 @@ function drawGrid() {
 }
 
 
+
+
 //clearing methods for the canva and the matrix
 
 function clearCanva() {
@@ -341,6 +333,8 @@ function clearCanva() {
     canvasContext.stroke();
 }
 
+
+
 function clearMatrix() {
     for (let i = 0; i < 20; i++) {
         for (let k = 0; k < 20; k++) {
@@ -348,6 +342,23 @@ function clearMatrix() {
         }
     }
 }
+
+
+
+function clearGameVariables() {
+
+    snakeCoordinations = [[9, 2], [9, 3], [9, 4]];
+    directionsQueue = [];
+    direction = 'right';
+    currentAppleCoordinations = [];
+    score = 0;
+    level = 1;
+}
+
+
+
+
+//menus
 
 function showPauseMenu(mainElement) {
 
@@ -365,19 +376,22 @@ function showPauseMenu(mainElement) {
         document.getElementById('pauseButton').disabled = false;
 
         directionsQueue = [];
+        let intervalTime = 0;
 
         if (level == 1) {
-            gameCycle = setInterval(drawScene, 300);
+            intervalTime = 300;
         }
         else if (level == 2) {
-            gameCycle = setInterval(drawScene, 200);
+            intervalTime = 200;
         }
         else if (level == 3) {
-            gameCycle = setInterval(drawScene, 100);
+            intervalTime = 100;
         }
         else if (level == 4) {
-            gameCycle = setInterval(drawScene, 70);
+            intervalTime = 70;
         }
+
+        gameCycle = setInterval(drawScene, intervalTime);
     });
 
     let quitButton = document.createElement('a');
@@ -397,4 +411,32 @@ function showPauseMenu(mainElement) {
     mainElement.appendChild(pauseMenuDiv);
 }
 
-//after dieing clear the game level
+
+function showGameOverMenu() {
+    let gameOverDiv = document.createElement('div');
+    gameOverDiv.setAttribute('id', 'gameOverDiv');
+    gameOverDiv.textContent = "Game Over!";
+
+
+    let restartGameButton = document.createElement('button');
+    restartGameButton.setAttribute('id', 'restartGameButton');
+    restartGameButton.setAttribute('style', 'position: absolute; left:20%; top:50%;');
+    restartGameButton.textContent = `Restart Game`;
+    restartGameButton.addEventListener('click', (e) => {
+
+        clearGameVariables();
+        document.getElementById('scoreBlock').textContent = "Score: 0";
+
+        gameCycle = setInterval(drawScene, 300);
+
+        e.target.parentElement.remove();
+    });
+
+    gameOverDiv.appendChild(restartGameButton);
+    let mainElement = document.getElementById('main');
+    mainElement.appendChild(gameOverDiv);
+}
+
+
+
+//
