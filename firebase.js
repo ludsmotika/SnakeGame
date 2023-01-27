@@ -14,24 +14,53 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
+var ref = database.ref("/gameScores");
 
 //functions to read and write data into the database
 
+export async function getTopScores() {
 
-// database.ref("gameScores").set({
-//     bestScore: "1000"
-// });
+    let data;
 
-// To read data from the database:
-// database.ref("gameScores").on("value", function (snapshot) {
-//     var data = snapshot.val();
-//     console.log(data);
-// });
-
-
-export async function getDanielScore() {
-    database.ref("/gameScores").on("value", function (snapshot) {
-        var data = snapshot.val();
-        return data;
+    await ref.once("value").then((snapshot) => {
+        data = snapshot.val();
     });
+
+    return data;
 }
+
+
+export async function checkForNewBestScore(score) {
+    let scores = await getTopScores();
+
+    const scoresArray = [...Object.entries(scores)];
+
+    let index = scoresArray.findIndex(x => x[1] < score);
+
+    if (index != -1) {
+        //we found new best score
+        return true;
+    }
+
+    return false;
+}
+
+export async function setNewBestRecord(name, score) {
+
+    //logic for removing the worst score
+    var data = {
+        name,
+        score
+    }
+
+    var newData = ref.push();
+    newData.set(data);
+}
+
+//  var data = {
+//     name,
+//     score
+// }
+
+// var newData = ref.push();
+// newData.set(data);

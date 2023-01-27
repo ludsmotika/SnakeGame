@@ -1,5 +1,5 @@
 import { html } from 'https://unpkg.com/lit-html?module';
-import { getDanielScore } from './firebase.js';
+import { setNewBestRecord, getTopScores, checkForNewBestScore } from './firebase.js';
 
 const width = 800;
 const height = 700;
@@ -228,7 +228,12 @@ function doNextMove(direction, snakeCoordinations) {
 
     if (isCrossing != undefined) {
         clearInterval(gameCycle);
-        showGameOverMenu();
+        if (checkForNewBestScore() == true) {
+            showBestScoreMenuToEnterName();
+        }
+        else {
+            showGameOverMenu();
+        }
     }
 
     snakeCoordinations.push([headCoordinations[0], headCoordinations[1]]);
@@ -438,5 +443,33 @@ function showGameOverMenu() {
 }
 
 
+function showBestScoreMenuToEnterName() {
 
-//
+    let div = document.createElement('div');
+    div.textContent = "Congratualtions!\n Your score is in the TOP 10 ranklist!\n Please enter your name!";
+
+    let textInputField = document.createElement('input');
+    textInputField.setAttribute('type', 'text');
+
+    let button = document.createElement('button');
+    button.textContent('Enter!');
+    button.addEventListener("click", (e) => {
+        let name = textInputField.value;
+        setNewBestRecord(name, score);
+        e.target.parentElement.remove();
+        showGameOverMenu();
+    });
+
+    div.appendChild(textInputField);
+    div.appendChild(button);
+
+    let mainElement = document.getElementById("main");
+    mainElement.appendChild(div);
+}
+
+
+
+//logic for the scores
+//after dieing check if the score is better than the top 10 scores
+//if it is better than the top ten open a menu for entering your three letters username
+//replacing the worst top ten score with the new one
