@@ -149,10 +149,29 @@ label {
 
 #gameOverDiv {
     position: absolute;
-    top: 22%;
-    left: 28%;
-    width: 600px;
-    height: 400px;
+    top: 35%;
+    left: 31%;
+    width: 500px;
+    height: 200px;
+    background-color: rgb(0, 128, 0);
+    text-align: center;
+    font-size: 34px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 3px solid black;
+    color: black;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: fantasy;
+}
+
+#newBestScoreDiv {
+    position: absolute;
+    top: 28%;
+    left: 30%;
+    width: 532px;
+    height: 300px;
     background-color: rgb(0, 128, 0);
     text-align: center;
     font-size: 34px;

@@ -190,7 +190,7 @@ function changeHeadCordinations(headCoordinations, direction) {
 
 
 
-function doNextMove(direction, snakeCoordinations) {
+async function doNextMove(direction, snakeCoordinations) {
 
     let headCoordinations = snakeCoordinations[snakeCoordinations.length - 1].slice(0);
 
@@ -228,7 +228,9 @@ function doNextMove(direction, snakeCoordinations) {
 
     if (isCrossing != undefined) {
         clearInterval(gameCycle);
-        if (checkForNewBestScore() == true) {
+
+        let newBestScore = await checkForNewBestScore(score);
+        if (newBestScore == true) {
             showBestScoreMenuToEnterName();
         }
         else {
@@ -446,13 +448,14 @@ function showGameOverMenu() {
 function showBestScoreMenuToEnterName() {
 
     let div = document.createElement('div');
+    div.setAttribute('id', 'newBestScoreDiv');
     div.textContent = "Congratualtions!\n Your score is in the TOP 10 ranklist!\n Please enter your name!";
 
     let textInputField = document.createElement('input');
     textInputField.setAttribute('type', 'text');
 
     let button = document.createElement('button');
-    button.textContent('Enter!');
+    button.textContent = 'Enter!';
     button.addEventListener("click", (e) => {
         let name = textInputField.value;
         setNewBestRecord(name, score);
@@ -463,7 +466,7 @@ function showBestScoreMenuToEnterName() {
     div.appendChild(textInputField);
     div.appendChild(button);
 
-    let mainElement = document.getElementById("main");
+    let mainElement = document.getElementById('main');
     mainElement.appendChild(div);
 }
 

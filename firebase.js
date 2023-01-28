@@ -35,7 +35,7 @@ export async function checkForNewBestScore(score) {
 
     const scoresArray = [...Object.entries(scores)];
 
-    let index = scoresArray.findIndex(x => x[1] < score);
+    let index = scoresArray.findIndex(x => x[1].score < score);
 
     if (index != -1) {
         //we found new best score
