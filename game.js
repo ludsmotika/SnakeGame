@@ -131,7 +131,7 @@ function playGame() {
     beginButton.remove();
 }
 
-function drawScene() {
+async function drawScene() {
     clearCanva();
     clearMatrix();
     drawGrid();
@@ -266,6 +266,8 @@ function checkApples() {
 
     let newAppleCoordinations = freePlaces[Math.floor(Math.random() * (freePlaces.length - 0 + 1)) + 0];
     currentAppleCoordinations = [newAppleCoordinations[0], newAppleCoordinations[1]];
+    canvasContext.drawImage(appleImage, currentAppleCoordinations[1] * colTickness, currentAppleCoordinations[0] * rowTickness, colTickness, rowTickness);
+
 }
 
 
@@ -427,7 +429,7 @@ function showGameOverMenu() {
 
     let restartGameButton = document.createElement('button');
     restartGameButton.setAttribute('id', 'restartGameButton');
-    restartGameButton.setAttribute('style', 'position: absolute; left:20%; top:50%;');
+    restartGameButton.setAttribute('style', 'position: absolute; top:45%;');
     restartGameButton.textContent = `Restart Game`;
     restartGameButton.addEventListener('click', (e) => {
 
@@ -449,13 +451,20 @@ function showBestScoreMenuToEnterName() {
 
     let div = document.createElement('div');
     div.setAttribute('id', 'newBestScoreDiv');
-    div.textContent = "Congratualtions!\n Your score is in the TOP 10 ranklist!\n Please enter your name!";
+    div.textContent = "Congratulations your score is in the TOP 10 ranklist!";
+
+    let p = document.createElement('p');
+    p.textContent = 'Please enter username:';
+    p.setAttribute('style', 'position:absolute; top:25%;');
 
     let textInputField = document.createElement('input');
     textInputField.setAttribute('type', 'text');
+    textInputField.setAttribute('placeholder','username...');
+    textInputField.setAttribute('id', 'nameInputField');
 
     let button = document.createElement('button');
     button.textContent = 'Enter!';
+    button.setAttribute('style', 'position:absolute; top: 70%;');
     button.addEventListener("click", (e) => {
         let name = textInputField.value;
         setNewBestRecord(name, score);
@@ -463,6 +472,7 @@ function showBestScoreMenuToEnterName() {
         showGameOverMenu();
     });
 
+    div.appendChild(p);
     div.appendChild(textInputField);
     div.appendChild(button);
 
@@ -471,8 +481,4 @@ function showBestScoreMenuToEnterName() {
 }
 
 
-
-//logic for the scores
-//after dieing check if the score is better than the top 10 scores
-//if it is better than the top ten open a menu for entering your three letters username
-//replacing the worst top ten score with the new one
+//TODO manage the cases when the user enter invalid username such as empty string or very long string

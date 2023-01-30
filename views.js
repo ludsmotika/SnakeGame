@@ -1,4 +1,5 @@
 import { html } from 'https://unpkg.com/lit-html?module';
+import { getTopScores } from './firebase.js';
 
 let main = document.getElementById('main');
 
@@ -42,10 +43,19 @@ export async function showHelpPage(ctx) {
 
 //TODO: finish the scores page logic
 
-let scoresPageTemplate = (scores) => html`<a id='backButtonScores' href="/" style="position:absolute; top: 80px; left: 100px;">Return to home</a><div id = "bestScoresPage"></div>`;
+let scoresPageTemplate = (scores) => html`<a id='backButtonScores' href="/" style="position:absolute; top: 80px; left: 100px;">Return to home</a><table id="scoresTable"><thead><tr><th>Username</th><th>Score</th></tr></thead></table>`;
 
 export async function showScoresPage(ctx) {
     //getting the data from the database for the best scores and visualizing the best 10 scores
-    let scores;
+
+
+    let scoresData = await getTopScores();
+
+    let scores = [];
+
+    for (const key in scoresData) {
+        scores.push([scoresData[key].name, scoresData[key].score]);
+    }
+
     await ctx.render(scoresPageTemplate(scores));
 }
