@@ -1,5 +1,5 @@
 import { html } from 'https://unpkg.com/lit-html?module';
-import { setNewBestRecord, getTopScores, checkForNewBestScore } from './firebase.js';
+import { setNewBestRecord, checkForNewBestScore, doesNameExist } from './firebase.js';
 
 const width = 800;
 const height = 700;
@@ -425,29 +425,47 @@ function showGameOverMenu() {
     let gameOverDiv = document.createElement('div');
     gameOverDiv.setAttribute('id', 'gameOverDiv');
     gameOverDiv.textContent = "Game Over!";
-
+    document.getElementById('pauseButton').disabled = true;
 
     let restartGameButton = document.createElement('button');
     restartGameButton.setAttribute('id', 'restartGameButton');
-    restartGameButton.setAttribute('style', 'position: absolute; top:45%;');
+    restartGameButton.setAttribute('style', 'position: absolute; left:16%; top:30%;');
     restartGameButton.textContent = `Restart Game`;
     restartGameButton.addEventListener('click', (e) => {
 
         clearGameVariables();
         document.getElementById('scoreBlock').textContent = "Score: 0";
 
+        document.getElementById('pauseButton').disabled = false;
+
         gameCycle = setInterval(drawScene, 300);
 
         e.target.parentElement.remove();
     });
 
+
+    let quitButton = document.createElement('a');
+
+    quitButton.textContent = 'Quit Game';
+    quitButton.setAttribute('style', 'position: absolute; left:16%; top: 65%;');
+    quitButton.setAttribute('href', '/');
+
+    quitButton.addEventListener('click', () => {
+        clearGameVariables();
+        clearInterval(gameCycle);
+    });
+
     gameOverDiv.appendChild(restartGameButton);
+    gameOverDiv.appendChild(quitButton);
+
     let mainElement = document.getElementById('main');
     mainElement.appendChild(gameOverDiv);
 }
 
 
 function showBestScoreMenuToEnterName() {
+
+    document.getElementById('pauseButton').disabled = true;
 
     let div = document.createElement('div');
     div.setAttribute('id', 'newBestScoreDiv');
@@ -459,14 +477,35 @@ function showBestScoreMenuToEnterName() {
 
     let textInputField = document.createElement('input');
     textInputField.setAttribute('type', 'text');
-    textInputField.setAttribute('placeholder','username...');
+    textInputField.setAttribute('placeholder', 'username...');
     textInputField.setAttribute('id', 'nameInputField');
 
     let button = document.createElement('button');
     button.textContent = 'Enter!';
     button.setAttribute('style', 'position:absolute; top: 70%;');
-    button.addEventListener("click", (e) => {
+    button.addEventListener("click", async (e) => {
+
+        //validation for the name
+        //name must not be an empty string or string longer than 30 symbols
+        //there cant be two identical names
+
         let name = textInputField.value;
+        let answer = await doesNameExist(name);
+
+        if (name == '') {
+            alert('The name cannot be an empty string!');
+            return;
+        }
+        else if (name.length > 30) {
+            alert('The name have to be shorter than 30 symbols!');
+            return;
+        }
+        else if (answer == true) {
+            alert('There is already a player using this username. Please enter different one!');
+            return;
+        }
+
+
         setNewBestRecord(name, score);
         e.target.parentElement.remove();
         showGameOverMenu();
@@ -481,4 +520,3 @@ function showBestScoreMenuToEnterName() {
 }
 
 
-//TODO manage the cases when the user enter invalid username such as empty string or very long string

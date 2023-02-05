@@ -1,9 +1,6 @@
 import { html } from 'https://unpkg.com/lit-html?module';
 import { getTopScores } from './firebase.js';
 
-let main = document.getElementById('main');
-
-
 let homePageTemplate = () => html`<div id="startingPage">
     <p class="mainText">Snake Game</p>
     
@@ -27,7 +24,7 @@ let helpPageTemplate = () => html`<div id="helpPage">
 <p class="mainText">Instructions</p>
 <h2 class="secondaryText">Gameplay: The player controls a long, thin snake-like creature that crawls along a
     plane, collecting food, avoiding collisions with its own
-    tail and the edges of the playing field. Every time the snake eats a piece of food, it becomes longer,
+    tail. Every time the snake eats a piece of food, it becomes longer,
     which gradually complicates the game.</h2>
 <img src="./resources/keyboardArrows.png" alt="keyboard image"
     style="position:absolute; top:350px; left: 850px" width="350">

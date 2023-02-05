@@ -73,3 +73,18 @@ export async function setNewBestRecord(name, score) {
     var newData = ref.push();
     newData.set(data);
 }
+
+
+export async function doesNameExist(name) {
+    let scores = await getTopScores();
+
+    const scoresArray = [...Object.entries(scores)];
+
+    for (const current of scoresArray) {
+        if (current[1].name == name) {
+            return true;
+        }
+    }
+
+    return false;
+}
