@@ -196,7 +196,7 @@ async function doNextMove(direction, snakeCoordinations) {
 
     changeHeadCordinations(headCoordinations, direction);
 
-    //check if you have eaten an apple
+    //check if you have ate an apple
     if (matrix[headCoordinations[0]][headCoordinations[1]] != 'A') {
         snakeCoordinations.shift();
     }
@@ -269,8 +269,6 @@ function checkApples() {
     canvasContext.drawImage(appleImage, currentAppleCoordinations[1] * colTickness, currentAppleCoordinations[0] * rowTickness, colTickness, rowTickness);
 
 }
-
-
 
 
 
@@ -484,10 +482,6 @@ function showBestScoreMenuToEnterName() {
     button.textContent = 'Enter!';
     button.setAttribute('style', 'position:absolute; top: 70%;');
     button.addEventListener("click", async (e) => {
-
-        //validation for the name
-        //name must not be an empty string or string longer than 30 symbols
-        //there cant be two identical names
 
         let name = textInputField.value;
         let answer = await doesNameExist(name);

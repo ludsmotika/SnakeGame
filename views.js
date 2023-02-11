@@ -8,13 +8,12 @@ let homePageTemplate = () => html`<div id="startingPage">
     <a style="position:absolute; top: 390px; left: 270px;" id="scores" href="/scores">Best Scores</a>
     <a style="position:absolute; top: 520px; left: 270px;" id="help" href="/help">Help</a>
     
-    <img src="./resources/snakeStartingPage.png" alt="snake image" width="600"
+    <img src="./SnakeGame-main/resources/snakeStartingPage.png" alt="snake image" width="600"
     style="position:absolute; top:150px; left: 800px">
 </div>`;
 
 
-export async function showHomePage(ctx) {
-    //Array.from(main.children).map(x => x.remove());
+export async function showHomePage(ctx) {;
     await ctx.render(homePageTemplate());
 }
 
@@ -26,19 +25,15 @@ let helpPageTemplate = () => html`<div id="helpPage">
     plane, collecting food, avoiding collisions with its own
     tail. Every time the snake eats a piece of food, it becomes longer,
     which gradually complicates the game.</h2>
-<img src="./resources/keyboardArrows.png" alt="keyboard image"
+<img src="./SnakeGame-main/resources/keyboardArrows.png" alt="keyboard image"
     style="position:absolute; top:350px; left: 850px" width="350">
-<img src="./resources/apple.png" alt="apple image" width="300"
+<img src="./SnakeGame-main/resources/apple.png" alt="apple image" width="300"
     style="position:absolute; top:90px; left: 1100px">
 </div>`;
 
 export async function showHelpPage(ctx) {
-    // Array.from(main.children).map(x => x.remove());
     await ctx.render(helpPageTemplate());
 }
-
-
-//TODO: finish the scores page logic
 
 let scoresPageTemplate = (scores) => html`<a id='backButtonScores' href="/" style="position:absolute; top: 80px; left: 100px;">Return to home</a><table id="scoresTable"><thead><tr><th>Username</th><th>Score</th></tr></thead><tbody>${scores.map(x => scoreTemplate(x))}</tbody></table>`;
 
@@ -62,10 +57,3 @@ export async function showScoresPage(ctx) {
 
     await ctx.render(scoresPageTemplate(orderedArray));
 }
-
-
-
-
-
-
-// let index = orderedArray.findIndex(x => x[1] < score);
