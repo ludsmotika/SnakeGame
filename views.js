@@ -8,7 +8,7 @@ let homePageTemplate = () => html`<div id="startingPage">
     <a style="position:absolute; top: 390px; left: 270px;" id="scores" href="/scores">Best Scores</a>
     <a style="position:absolute; top: 520px; left: 270px;" id="help" href="/help">Help</a>
     
-    <img src="./SnakeGame-main/resources/snakeStartingPage.png" alt="snake image" width="600"
+    <img src="./resources/snakeStartingPage.png" alt="snake image" width="600"
     style="position:absolute; top:150px; left: 800px">
 </div>`;
 
@@ -25,9 +25,9 @@ let helpPageTemplate = () => html`<div id="helpPage">
     plane, collecting food, avoiding collisions with its own
     tail. Every time the snake eats a piece of food, it becomes longer,
     which gradually complicates the game.</h2>
-<img src="./SnakeGame-main/resources/keyboardArrows.png" alt="keyboard image"
+<img src="./resources/keyboardArrows.png" alt="keyboard image"
     style="position:absolute; top:350px; left: 850px" width="350">
-<img src="./SnakeGame-main/resources/apple.png" alt="apple image" width="300"
+<img src="./resources/apple.png" alt="apple image" width="300"
     style="position:absolute; top:90px; left: 1100px">
 </div>`;
 
