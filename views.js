@@ -1,4 +1,4 @@
-import { html } from 'https://unpkg.com/lit-html?module';
+import {html} from 'https://esm.run/lit-html@1';
 import { getTopScores } from './firebase.js';
 
 let homePageTemplate = () => html`<div id="startingPage">

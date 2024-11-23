@@ -1,7 +1,7 @@
 import { showScoresPage, showHelpPage, showHomePage } from "./views.js";
 import { showGame } from "./game.js";
 import { default as page } from './node_modules/page/page.mjs';
-import { render } from 'https://unpkg.com/lit-html?module';
+import { render } from 'https://esm.run/lit-html@1';
 
 let mainElement = document.getElementById('main');
 

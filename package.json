@@ -9,9 +9,8 @@
   "license": "ISC",
   "dependencies": {
     "html": "^1.0.0",
-    "lit-html": "^1.3.0",
+    "lit-html": "^1.4.1",
     "page": "^1.11.6"
   },
-  "devDependencies": {},
   "description": ""
 }

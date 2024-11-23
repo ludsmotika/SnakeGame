@@ -1,4 +1,4 @@
-import { html } from 'https://unpkg.com/lit-html?module';
+import { html } from 'https://esm.run/lit-html@1';
 import { setNewBestRecord, checkForNewBestScore, doesNameExist } from './firebase.js';
 
 const width = 800;
